@@ -1,6 +1,17 @@
+from unicodedata import name
 from django.db import models
 
 # Create your models here.
+
+class CategoryModel(models.Model):
+    name = models.CharField(max_length=255)
+    
+    def __str__(self) -> str:
+        return  self.name
+    
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
 class AuthorModel(models.Model):
     first_name = models.CharField(max_length=100)
@@ -13,7 +24,7 @@ class AuthorModel(models.Model):
         return f"{self.first_name} {self.last_name}"
     
     def __str__(self):
-        return self.full_name()    
+        return self.full_name 
     
     class Meta:
         verbose_name = 'author'
@@ -59,6 +70,7 @@ class BookImageModel(models.Model):
 class BookModel(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(AuthorModel, on_delete=models.RESTRICT)
+    category = models.ForeignKey(CategoryModel, on_delete=models.RESTRICT, null=True, blank=True)
     price = models.FloatField()
     real_price = models.FloatField()
     discount = models.SmallIntegerField(default=0)

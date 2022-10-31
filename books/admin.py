@@ -16,6 +16,9 @@ class PublisherModelAdmin(admin.ModelAdmin):
 @admin.register(models.TranslatorModel)
 class TranslatorModelAdmin(admin.ModelAdmin):
     pass
+@admin.register(models.CategoryModel)
+class CategoruModelAdmin(admin.ModelAdmin):
+    pass
 
 @admin.register(models.BookModel)
 class BookModelAdmin(admin.ModelAdmin):
