@@ -6,8 +6,15 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework import filters
+from .paginations import BooksPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
+class CategoryListApiView(generics.ListAPIView):
+    queryset = CategoryModel.objects.all()
+    serializer_class = CategoryModelSerializer
+    permission_classes = [AllowAny, ]
+    pagination_class = None
 
 class CategoryBooksApiView(APIView):
     
@@ -26,16 +33,9 @@ class BookDetailApiView(generics.RetrieveAPIView):
 
 class BookModelListAPIView(generics.ListAPIView):
     permission_classes = (AllowAny,)
+    queryset = BookModel.objects.all()
     serializer_class = BookModelSerializer
-    filter_backends = [filters.SearchFilter, ]
-    search_fields = ['title']
+    filter_backends = [DjangoFilterBackend,]
+    filterset_fields = ('title', )
+    pagination_class = BooksPagination
         
-    def list(self, request, *args, **kwargs):
-        queryset = BookModel.objects.all()
-        cat_qs = CategoryModel.objects.all()
-        serializer = BookModelSerializer(queryset, many = True)
-        cat_serializer = CategoryModelSerializer(cat_qs, many=True)
-        return Response({
-            'books': serializer.data,
-            'categories': cat_serializer.data
-        })
